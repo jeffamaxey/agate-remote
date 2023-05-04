@@ -33,11 +33,10 @@ def from_url(cls, url, callback=agate.Table.from_csv, binary=False, requests_enc
 
     if binary:
         content = six.BytesIO(r.content)
+    elif six.PY2:
+        content = six.StringIO(r.content.decode('utf-8'))
     else:
-        if six.PY2:
-            content = six.StringIO(r.content.decode('utf-8'))
-        else:
-            content = six.StringIO(r.text)
+        content = six.StringIO(r.text)
 
     return callback(content, **kwargs)
 
